@@ -107,7 +107,7 @@ sys.stdout.write('<body>\n')
 sys.stdout.write('<div class="terminliste">\n')
 
 datestart = datetime.date.today()#date(2017,  1,  1)
-dateend   = datetime.date(2017, 12, 31)
+dateend   = datetime.date(2017, 4, 30)
 
 events=[]
 cal=vobject.readOne(urllib.urlopen(url))
