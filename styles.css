@@ -57,3 +57,17 @@ div.description {
 	transform: scale(0.8);
 	border-top: 1px solid #ddd;
 }
+
+div.month>h1 {
+	background-color: #1570BF;
+	color: white;
+	padding: 0.2em;
+	font-variant: small-caps;
+	font-size: 1.5em;
+	font-weight: normal;
+	text-align: center;
+}
+
+@media print {
+    div.month {page-break-after: always;}
+}
