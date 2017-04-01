@@ -105,6 +105,7 @@ sys.stdout.write('<link rel="stylesheet" href="styles.css">\n')
 sys.stdout.write('</head>\n')
 sys.stdout.write('<body>\n')
 sys.stdout.write('<div class="terminliste">\n')
+sys.stdout.write('<img src="logo_banner_300.png" >\n')
 
 datestart = datetime.date.today()#date(2017,  1,  1)
 dateend   = datetime.date(2017, 4, 30)
