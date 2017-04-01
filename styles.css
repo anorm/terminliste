@@ -1,0 +1,59 @@
+body {
+	font-family: Verdana, Geneva, sans-serif;
+}
+div.terminliste {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.event h1 {
+	font-size: 1.2em;
+}
+
+.event .tag {
+	display: inline;
+
+	padding: 1px;
+	margin: 1px;
+	font-size: 0.7em;
+
+}
+
+.event .tag.hovedkorps {
+	background-color: #00c;
+	color: white;
+}
+
+.event .tag.juniorkorps {
+	background-color: #44f;
+	color: white;
+}
+
+.event .tag.aspiranter {
+	background-color: #99f;
+	color: white;
+}
+
+.event .tag.drill {
+	background-color: #FF69B4;
+	color: white;
+}
+
+.event .tag.kor {
+	background-color: red;
+	color: white;
+}
+
+.event .tag.foresatte {
+	background-color: #da0;
+	color: white;
+}
+
+.event .tag.konkurransedrill {
+	display: none;
+}
+
+div.description {
+	transform: scale(0.8);
+	border-top: 1px solid #ddd;
+}
