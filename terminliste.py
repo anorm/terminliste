@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import cgi
 import copy
 import datetime
 import dateutil
@@ -8,13 +9,29 @@ import sys
 import urllib
 import vobject
 
+month_names = [
+'',
+'Januar',
+'Februar',
+'Mars',
+'April',
+'Mai',
+'Juni',
+'Juli',
+'August',
+'September',
+'Oktober',
+'November',
+'Desember',
+]
+
 class Event:
 	def __init__(self):
 		self.summary     = u''
 		self.description = u''
 		self.tags        = []
 		self.start       = datetime.date(2000, 1, 1)
-		self.stop        = datetime.date(2000, 1, 1)
+		self.stop        = None
 
 	@staticmethod
 	def parse(vevent):
@@ -22,7 +39,8 @@ class Event:
 		event.summary      = vevent.summary.value
 		event.description  = vevent.description.value
 		event.start        = vevent.dtstart.value
-		event.stop         = vevent.dtend.value
+		if hasattr(vevent, 'dtend'):
+			event.stop         = vevent.dtend.value
 		try:
 			event.tags = vevent.x_tags.value.split(',')
 		except AttributeError:
@@ -35,7 +53,7 @@ class Event:
 			duration = vevent.dtend.value - vevent.dtstart.value
 			for start in list(rruleset):
 				stop = start + duration
-				e = copy.deepcopy(event)
+				e = copy.copy(event)
 				e.start = start
 				e.stop = stop
 				ret.append(e)
@@ -47,7 +65,13 @@ class Event:
 	def get_html(self):
 		ret = []
 		ret.append(u'<div class="event">')
-		ret.append(u'<h1>{}</h1>'.format(self.summary))
+		if type(self.stop) is datetime.date:
+			self.stop -= datetime.timedelta(days=1)
+		if self.start.day == self.stop.day:
+			day = '{}.'.format(self.start.day)
+		else:
+			day = '{}. - {}.'.format(self.start.day, self.stop.day)
+		ret.append(u'<h1><small>{} - </small>{}</h1>'.format(day, self.summary))
 		if self.tags:
 			ret.append(u'<div class="tags">')
 			ret.append(u''.join([u'<div class="tag {0}">{0}</div>'.format(tag.lower(), tag) for tag in self.tags]))
@@ -91,24 +115,42 @@ for child in cal.getChildren():
 	if not isinstance(child, vobject.icalendar.RecurringComponent):
 		continue
 
-	start = child.dtstart.value
-	if isinstance(start, datetime.datetime):
-		start = start.date()
-	if start > dateend:
-		continue
-
-	try:
-		end = child.dtend.value
-		if isinstance(end, datetime.datetime):
-			end = end.date()
-		if end < datestart:
+	if False:
+		start = child.dtstart.value
+		if isinstance(start, datetime.datetime):
+			start = start.date()
+		if start > dateend:
 			continue
-	except AttributeError:
-		pass
+
+		try:
+			end = child.dtend.value
+			if isinstance(end, datetime.datetime):
+				end = end.date()
+			if end < datestart:
+				continue
+		except AttributeError:
+			pass
 
 	events.extend(Event.parse(child))
 
-#sys.stdout.write(event.get_html().encode('utf-8'))
+lastMonth = None
+for event in sorted(events, key=lambda x: x.start if type(x.start) is datetime.date else x.start.date()):
+	if (event.start if type(event.start) is datetime.date else event.start.date()) > dateend:
+		continue
+	if (event.stop if type(event.stop) is datetime.date else event.stop.date()) < datestart:
+		continue
+	if 'samspill' in event.summary.lower():
+		continue
+	if 'trening, drillen' in event.summary.lower():
+		continue
+	if u'korøvelse' in event.summary.lower():
+		continue
+	if lastMonth != event.start.month:
+		if lastMonth is not None:
+			sys.stdout.write('</div><hr>\n')
+		lastMonth = event.start.month
+		sys.stdout.write('<div class="month"><h1>{}</h1>\n'.format(month_names[lastMonth]))
+	sys.stdout.write(event.get_html().encode('utf-8'))
 
 sys.stdout.write('</div>\n')
 sys.stdout.write('</body>\n')
