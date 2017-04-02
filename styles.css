@@ -1,82 +1,77 @@
 html {
-    font-size: 12px;
-    line-height: 1.5;
+	font-size: 18px;
+	line-height: 1.5;
 }
 
 body {
-    font-family: Verdana, Geneva, sans-serif;
-    color: #333333;
+	font-family: Verdana, Geneva, sans-serif;
+	color: #333333;
 }
 
 .terminliste {
-    width: 100%;
-    /*max-width: 800px;*/
-    margin: 0 auto;
-}
-
-.event {
-    width: 90%;
-    margin: 0 auto;
+	width: 80%;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
 
 .event:not(:last-child) {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid #CCCCCC;
+	margin-bottom: 1.5rem;
+	padding-bottom: 1.5rem;
+	border-bottom: 1px solid #CCCCCC;
 }
 
-    .event h1 {
-        font-size: 1.33rem;
-        line-height: 1.1;
-        margin-top: 0;
-        margin-bottom: 1.33rem;
-    }
+	.event h1 {
+		font-size: 1.33rem;
+		line-height: 1.1;
+		margin-top: 0;
+		margin-bottom: 1.33rem;
+	}
 
 
 .time {
-    font-size: .9rem;
-    color: #555555;
+	font-size: .9rem;
+	color: #555555;
 }
 
 .tag {
-    display: inline-block;
-    padding: 1px 2px;
-    font-size: .7rem;
-    color: #FFFFFF;
+	display: inline-block;
+	padding: 1px 2px;
+	font-size: .7rem;
+	color: #FFFFFF;
 }
 
 .tag:not(:last-child) {
-    margin-right: 4px;
+	margin-right: 4px;
 }
 
-    .tag.hovedkorps {
-        background-color: #0000CC;
-    }
+	.tag.hovedkorps {
+		background-color: #0000CC;
+	}
 
-    .tag.juniorkorps {
-        background-color: #4444FF;
-    }
+	.tag.juniorkorps {
+		background-color: #4444FF;
+	}
 
-    .tag.aspiranter {
-        background-color: #9999FF;
-    }
+	.tag.aspiranter {
+		background-color: #9999FF;
+	}
 
-    .tag.drill {
-        background-color: #FF69B4;
-    }
+	.tag.drill {
+		background-color: #FF69B4;
+	}
 
-    .tag.kor {
-        background-color: #FF0000;
-    }
+	.tag.kor {
+		background-color: #FF0000;
+	}
 
-    .tag.foresatte {
-        background-color: #DDAA00;
-    }
+	.tag.foresatte {
+		background-color: #DDAA00;
+	}
 
-    .tag.konkurransedrill {
-        display: none;
-    }
+	.tag.konkurransedrill {
+		display: none;
+	}
 
 
 .description {
@@ -88,18 +83,18 @@ body {
 
 }
 
-    .month + .month {
-        margin-top: 3rem;
-    }
+	.month + .month {
+		margin-top: 3rem;
+	}
 
-    .month > h1 {
-        background-color: #1570BF;
-        color: white;
-        padding: .2rem;
-        font-size: 1.5rem;
-        font-weight: normal;
-        text-align: center;
-    }
+	.month > h1 {
+		background-color: #1570BF;
+		color: white;
+		padding: .2rem;
+		font-size: 1.5rem;
+		font-weight: normal;
+		text-align: center;
+	}
 
 @media print {
     div.month {page-break-after: always;}
