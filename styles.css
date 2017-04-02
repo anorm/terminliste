@@ -1,72 +1,105 @@
+html {
+    font-size: 12px;
+    line-height: 1.5;
+}
+
 body {
-	font-family: Verdana, Geneva, sans-serif;
-}
-div.terminliste {
-	width: 80%;
-	margin: 0 auto;
+    font-family: Verdana, Geneva, sans-serif;
+    color: #333333;
 }
 
-.event h1 {
-	font-size: 1.2em;
+.terminliste {
+    width: 100%;
+    /*max-width: 800px;*/
+    margin: 0 auto;
 }
 
-.event .tag {
-	display: inline;
+.event {
+    width: 90%;
+    margin: 0 auto;
+}
 
-	padding: 1px;
-	margin: 1px;
-	font-size: 0.7em;
+
+.event:not(:last-child) {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+    .event h1 {
+        font-size: 1.33rem;
+        line-height: 1.1;
+        margin-top: 0;
+        margin-bottom: 1.33rem;
+    }
+
+
+.time {
+    font-size: .9rem;
+    color: #555555;
+}
+
+.tag {
+    display: inline-block;
+    padding: 1px 2px;
+    font-size: .7rem;
+    color: #FFFFFF;
+}
+
+.tag:not(:last-child) {
+    margin-right: 4px;
+}
+
+    .tag.hovedkorps {
+        background-color: #0000CC;
+    }
+
+    .tag.juniorkorps {
+        background-color: #4444FF;
+    }
+
+    .tag.aspiranter {
+        background-color: #9999FF;
+    }
+
+    .tag.drill {
+        background-color: #FF69B4;
+    }
+
+    .tag.kor {
+        background-color: #FF0000;
+    }
+
+    .tag.foresatte {
+        background-color: #DDAA00;
+    }
+
+    .tag.konkurransedrill {
+        display: none;
+    }
+
+
+.description {
 
 }
 
-.event .tag.hovedkorps {
-	background-color: #00c;
-	color: white;
+
+.month {
+
 }
 
-.event .tag.juniorkorps {
-	background-color: #44f;
-	color: white;
-}
+    .month + .month {
+        margin-top: 3rem;
+    }
 
-.event .tag.aspiranter {
-	background-color: #99f;
-	color: white;
-}
-
-.event .tag.drill {
-	background-color: #FF69B4;
-	color: white;
-}
-
-.event .tag.kor {
-	background-color: red;
-	color: white;
-}
-
-.event .tag.foresatte {
-	background-color: #da0;
-	color: white;
-}
-
-.event .tag.konkurransedrill {
-	display: none;
-}
-
-div.description {
-	transform: scale(0.8);
-	border-top: 1px solid #ddd;
-}
-
-div.month>h1 {
-	background-color: #1570BF;
-	color: white;
-	padding: 0.2em;
-	font-variant: small-caps;
-	font-size: 1.5em;
-	font-weight: normal;
-	text-align: center;
-}
+    .month > h1 {
+        background-color: #1570BF;
+        color: white;
+        padding: .2rem;
+        font-size: 1.5rem;
+        font-weight: normal;
+        text-align: center;
+    }
 
 @media print {
     div.month {page-break-after: always;}
