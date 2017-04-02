@@ -45,6 +45,8 @@ class Event:
             event.tags = vevent.x_tags.value.split(',')
         except AttributeError:
             event.tags = []
+        tag_order=['Hovedkorps', 'Juniorkorps', 'Aspiranter', 'Drill', 'Kor', 'Foresatte', 'Konkurransedrill']
+        event.tags.sort(key=lambda x: tag_order.index(x))
 
         ret = []
 
