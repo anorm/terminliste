@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import argparse
 import cgi
 import copy
 import datetime
 import dateutil
+from dateutil import parser
 import sys
 import urllib
 import vobject
@@ -107,65 +109,75 @@ def gettext(element, path, default=u''):
         return default
     return a.text
 
-url='http://www.manstadskolekorps.no/?plugin=all-in-one-event-calendar&controller=ai1ec_exporter_controller&action=export_events'
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--url',   default='http://www.manstadskolekorps.no/?plugin=all-in-one-event-calendar&controller=ai1ec_exporter_controller&action=export_events')
+    parser.add_argument('--start', default=str(datetime.date.today()))
+    parser.add_argument('--end',   default='12-31')
+    parser.add_argument('filename', default='terminliste.html')
+    args = parser.parse_args()
 
-sys.stdout.write('<!DOCTYPE html>\n')
-sys.stdout.write('<html lang="nb">\n')
-sys.stdout.write('<head>\n')
-sys.stdout.write('<meta charset="UTF-8">\n')
-sys.stdout.write('<title>Terminliste</title>\n')
-sys.stdout.write('<link rel="stylesheet" href="styles.css">\n')
-sys.stdout.write('</head>\n')
-sys.stdout.write('<body>\n')
-sys.stdout.write('<div class="terminliste">\n')
-sys.stdout.write('<center><img src="logo_banner_300.png" ></center>\n')
+    with open(args.filename, 'w') as f:
+        f.write('<!DOCTYPE html>\n')
+        f.write('<html lang="nb">\n')
+        f.write('<head>\n')
+        f.write('<meta charset="UTF-8">\n')
+        f.write('<title>Terminliste</title>\n')
+        f.write('<link rel="stylesheet" href="styles.css">\n')
+        f.write('</head>\n')
+        f.write('<body>\n')
+        f.write('<div class="terminliste">\n')
+        f.write('<center><img src="logo_banner_300.png" ></center>\n')
 
-datestart = datetime.date.today()#date(2017,  1,  1)
-dateend   = datetime.date(2017, 7, 31)
+        datestart = dateutil.parser.parse(args.start).date()
+        dateend   = dateutil.parser.parse(args.end).date()
 
-events=[]
-cal=vobject.readOne(urllib.urlopen(url))
-for child in cal.getChildren():
-    if not isinstance(child, vobject.icalendar.RecurringComponent):
-        continue
-
-    if False:
-        start = child.dtstart.value
-        if isinstance(start, datetime.datetime):
-            start = start.date()
-        if start > dateend:
-            continue
-
-        try:
-            end = child.dtend.value
-            if isinstance(end, datetime.datetime):
-                end = end.date()
-            if end < datestart:
+        events=[]
+        cal=vobject.readOne(urllib.urlopen(args.url))
+        for child in cal.getChildren():
+            if not isinstance(child, vobject.icalendar.RecurringComponent):
                 continue
-        except AttributeError:
-            pass
 
-    events.extend(Event.parse(child))
+            if False:
+                start = child.dtstart.value
+                if isinstance(start, datetime.datetime):
+                    start = start.date()
+                if start > dateend:
+                    continue
 
-lastMonth = None
-for event in sorted(events, key=lambda x: x.start if type(x.start) is datetime.date else x.start.date()):
-    if (event.start if type(event.start) is datetime.date else event.start.date()) > dateend:
-        continue
-    if (event.stop if type(event.stop) is datetime.date else event.stop.date()) < datestart:
-        continue
-    if 'samspill' in event.summary.lower():
-        continue
-    if 'trening, drillen' in event.summary.lower():
-        continue
-    if u'korøvelse' in event.summary.lower():
-        continue
-    if lastMonth != event.start.month:
-        if lastMonth is not None:
-            sys.stdout.write('</div>\n')
-        lastMonth = event.start.month
-        sys.stdout.write('<div class="month"><h1>{}</h1>\n'.format(month_names[lastMonth]))
-    sys.stdout.write(event.get_html().encode('utf-8'))
+                try:
+                    end = child.dtend.value
+                    if isinstance(end, datetime.datetime):
+                        end = end.date()
+                    if end < datestart:
+                        continue
+                except AttributeError:
+                    pass
 
-sys.stdout.write('</div>\n')
-sys.stdout.write('</body>\n')
-sys.stdout.write('</html>\n')
+            events.extend(Event.parse(child))
+
+        lastMonth = None
+        for event in sorted(events, key=lambda x: x.start if type(x.start) is datetime.date else x.start.date()):
+            if (event.start if type(event.start) is datetime.date else event.start.date()) > dateend:
+                continue
+            if (event.stop if type(event.stop) is datetime.date else event.stop.date()) < datestart:
+                continue
+            if 'samspill' in event.summary.lower():
+                continue
+            if 'trening, drillen' in event.summary.lower():
+                continue
+            if u'korøvelse' in event.summary.lower():
+                continue
+            if lastMonth != event.start.month:
+                if lastMonth is not None:
+                    f.write('</div>\n')
+                lastMonth = event.start.month
+                f.write('<div class="month"><h1>{}</h1>\n'.format(month_names[lastMonth]))
+            f.write(event.get_html().encode('utf-8'))
+
+        f.write('</div>\n')
+        f.write('</body>\n')
+        f.write('</html>\n')
+
+if __name__ == "__main__":
+    main()
